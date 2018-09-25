@@ -35,7 +35,7 @@ parameters:
 - displayName: Application Name
   description: The name for the application.
   name: APPLICATION_NAME
-  value: myapp
+  #value: myapp
   required: true
 - displayName: KIE Admin User
   description: KIE administrator username
