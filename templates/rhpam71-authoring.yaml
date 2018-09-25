@@ -40,8 +40,8 @@ parameters:
 - displayName: KIE Admin User
   description: KIE administrator username
   name: KIE_ADMIN_USER
-  value: adminUser
-  required: false
+  #value: adminUser
+  required: true
 - displayName: KIE Admin Password
   description: KIE administrator password
   name: KIE_ADMIN_PWD
