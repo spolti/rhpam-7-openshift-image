@@ -10,7 +10,7 @@ if (!pullRequestId) {
   process.exit(1)
 }
 
-const pullRequestUrl = `/repos/dfeagiledevops/mtc/pulls/${pullRequestId}`
+const pullRequestUrl = `/repos/spolti/rhpam-7-openshift-image/pulls/${pullRequestId}`
 
 const options = {
   hostname: 'api.github.com',
