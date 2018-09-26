@@ -11,8 +11,6 @@ ignore:
   - smartrouter/*
   - example-app-secret-template.yaml
   - rhpam71-image-streams.yaml
-  - templates/contrib/jdbc/*
-  - templates/docs/*
   
 # before_install:
 #   - node ./temp.js $TRAVIS_PULL_REQUEST
