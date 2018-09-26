@@ -9,5 +9,5 @@ install:
 script:
   - chmod +x openshift-template-validator-linux-amd64
   - ./openshift-template-validator-linux-amd64 --version
-  - ./openshift-template-validator-linux-amd64 validadte -d templates/
+  - ./openshift-template-validator-linux-amd64 validate -d templates/
 sudo: false
