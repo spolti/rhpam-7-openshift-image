@@ -2,6 +2,6 @@ install:
   - wget https://github.com/jboss-container-images/jboss-kie-modules/raw/master/tools/openshift-template-validator/openshift-template-validator-linux-amd64
 
 script:
-  - openshift-template-validator-linux-amd64 validate -d templates/
+  - ./openshift-template-validator-linux-amd64 --version
 
 sudo: false
