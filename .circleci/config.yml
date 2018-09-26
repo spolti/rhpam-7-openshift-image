@@ -6,14 +6,19 @@ jobs:
     steps:
       - checkout
       - run:
+          type: shell
           name: Download openshift-validator-tool
-          command: $(which wget) https://github.com/jboss-container-images/jboss-kie-modules/raw/master/tools/openshift-template-validator/openshift-template-validator-linux-amd64
+          command: |
+            wget https://github.com/jboss-container-images/jboss-kie-modules/raw/master/tools/openshift-template-validator/openshift-template-validator-linux-amd64
       - run:
           name: Add execution permission to openshift-validator-tool
-          command: chmod +x openshift-template-validator-linux-amd64
+          command: |
+            chmod +x openshift-template-validator-linux-amd64
       - run:
           name: Print the openshift-validator-tool version
-          command: ./openshift-template-validator-linux-amd64 --version
+          command: |
+            ./openshift-template-validator-linux-amd64 --version
       - run:
           name: Verify the templates
-          command: ./openshift-template-validator-linux-amd64 validate -d templates/
+          command: |
+            ./openshift-template-validator-linux-amd64 validate -d templates/
