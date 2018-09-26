@@ -1,8 +1,9 @@
 'use strict'
 
+//example retrieve from https://guyharwood.co.uk/2018/03/12/conditional-travis-builds-with-pull-request-labels/
+
 const https = require('https')
 const ciEnabledLabelId = 1069102179
-// Example Github API Pull Request URL - 'https://github.com/DFEAGILEDEVOPS/MTC/pull/566'
 const pullRequestId = process.argv[2]
 
 if (!pullRequestId) {
