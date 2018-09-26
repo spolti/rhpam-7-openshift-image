@@ -1,22 +1,29 @@
-
 sudo: false
 language: generic
-stages:
-  - compile
-    if: type = pull_request
-  - wget-validator
-  - add-permission
-  - verify-validator-version
-  - verify-templates
- 
-jobs:
-  include:
-    - stage: compile
-    - stage: wget-validator
-      script: wget https://github.com/jboss-container-images/jboss-kie-modules/raw/master/tools/openshift-template-validator/openshift-template-validator-linux-amd64
-    - stage: add-permission
-      script: chmod +x openshift-template-validator-linux-amd64
-    - stage: verify-validator-version
-      script: ./openshift-template-validator-linux-amd64 --version
-    - stage: verify-templates
-      script: ./openshift-template-validator-linux-amd64 validate -d templates/
+
+if: type = pull_request
+
+# before_install:
+#   ignore:
+#     - *.md
+#     - businesscentral-indexing/**
+#     - businesscentral-monitoring/**
+#     - businesscentral/**
+#     - controller/**
+#     - kieserver/**
+#     - quickstarts/library-process/**
+#     - smartrouter/**
+#     - example-app-secret-template.yaml
+#     - rhpam71-image-streams.yaml
+  
+# before_install:
+#   - node ./temp.js $TRAVIS_PULL_REQUEST
+
+install:
+  - wget https://github.com/jboss-container-images/jboss-kie-modules/raw/master/tools/openshift-template-validator/openshift-template-validator-linux-amd64
+
+script:
+  - chmod +x openshift-template-validator-linux-amd64
+  - ./openshift-template-validator-linux-amd64 --version
+  - ./openshift-template-validator-linux-amd64 validate -d templates/
+sudo: false
