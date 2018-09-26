@@ -32,7 +32,7 @@ const parseResponse = (res) => {
   } catch (err) {
     console.error(`error parsing labels for PR ${pullRequestId}`)
     console.error(err)
-    process.exit(1)
+    process.exit(0)
   }
   const ciEnabledLabel = labels.find(item => item.id === ciEnabledLabelId)
   if (ciEnabledLabel) {
