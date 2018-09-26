@@ -3,6 +3,7 @@ sudo: false
 language: generic
 stages:
   - compile
+    if: type = pull_request
   - wget-validator
   - add-permission
   - verify-validator-version
@@ -11,12 +12,11 @@ stages:
 jobs:
   include:
     - stage: compile
-      if: type = pull_request
-    - wget-validator
+    - stage: wget-validator
       script: wget https://github.com/jboss-container-images/jboss-kie-modules/raw/master/tools/openshift-template-validator/openshift-template-validator-linux-amd64
-    - add-permission
+    - stage: add-permission
       script: chmod +x openshift-template-validator-linux-amd64
-    - verify-validator-version
+    - stage: verify-validator-version
       script: ./openshift-template-validator-linux-amd64 --version
-    - verify-templates
+    - stage: verify-templates
       script: ./openshift-template-validator-linux-amd64 validate -d templates/
