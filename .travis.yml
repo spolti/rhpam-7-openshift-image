@@ -1,5 +1,8 @@
 if: type = pull_request
 
+before_install:
+  - node ./temp.js $TRAVIS_PULL_REQUEST
+
 install:
   - wget https://github.com/jboss-container-images/jboss-kie-modules/raw/master/tools/openshift-template-validator/openshift-template-validator-linux-amd64
 
