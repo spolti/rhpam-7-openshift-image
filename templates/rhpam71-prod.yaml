@@ -35,7 +35,6 @@ parameters:
 - displayName: Application Name
   description: The name for the application.
   name: APPLICATION_NAME
-  value: myapp
   required: true
 - displayName: Maven repository ID
   description: The id to use for the maven repository, if set. Default is generated randomly.
