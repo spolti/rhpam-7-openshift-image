@@ -38,7 +38,6 @@ parameters:
   value: myapp
   required: true
 - displayName: KIE Admin User
-  description: KIE administrator username
   name: KIE_ADMIN_USER
   value: adminUser
   required: false
