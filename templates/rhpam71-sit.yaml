@@ -15,7 +15,7 @@ metadata:
     template.openshift.io/bindable: "false"
   name: rhpam71-sit
 labels:
-  template: rhpam71-sit
+  template: rhpam71-sit5
   rhpam: "1.0"
 message: |-
           A new environment has been set up for Red Hat Process Automation Manager 7.
