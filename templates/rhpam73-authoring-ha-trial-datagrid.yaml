@@ -101,6 +101,37 @@ parameters:
   name: KIE_SERVER_MYSQL_DB
   value: rhpam7
   required: false
+- displayName: KIE Server MySQL Database Volume Capacity
+  description: Size of persistent storage for the KIE server database volume.
+  name: KIE_SERVER_MYSQL_DB_VOLUME_CAPACITY
+  value: 1Gi
+  required: true
+- displayName: DataGrid MySQL Database User
+  description: DataGrid MySQL database username
+  name: DATAGRID_MYSQL_USER
+  value: rhpam
+  required: false
+- displayName: DataGrid MySQL Database Password
+  description: DataGrid MySQL database password
+  name: DATAGRID_MYSQL_PWD
+  from: "[a-zA-Z]{6}[0-9]{1}!"
+  generate: expression
+  required: false
+- displayName: DataGrid MySQL Database Name
+  description: DataGrid MySQL database name
+  name: DATAGRID_MYSQL_DB
+  value: datagrid
+  required: false
+- displayName: DataGrid Database JNDI Name
+  description: DataGrid Database JNDI name used by application to resolve the datasource, e.g.  java:/jboss/datasources/datagrid
+  name: DATAGRID_MYSQL_DB_JNDI
+  value: java:/jboss/datasources/datagrid
+  required: false
+- displayName: DataGrid MySQL Database Volume Capacity
+  description: Size of persistent storage for the DataGrid database volume.
+  name: DATAGRID_MYSQL_DB_VOLUME_CAPACITY
+  value: 1Gi
+  required: true
 - displayName: MySQL ImageStream Namespace
   description: Namespace in which the ImageStream for the MySQL image is
     installed. The ImageStream is already installed in the openshift namespace.
@@ -114,12 +145,37 @@ parameters:
   name: MYSQL_IMAGE_STREAM_TAG
   value: "5.7"
   required: false
-- displayName: Database Volume Capacity
-  description: Size of persistent storage for the database volume.
-  name: DB_VOLUME_CAPACITY
-  value: 1Gi
-  required: true
+- displayName: Maven mirror URL
+  description: Maven mirror to use by Business Central and KIE server.
+  name: MAVEN_MIRROR_URL
+  required: false
 ## MySQL database parameters END
+- displayName: JGroups Secret Name
+  description: The name of the secret containing the keystore file
+  name: JGROUPS_ENCRYPT_SECRET
+  value: datagrid-app-secret
+  required: true
+- displayName: JGroups Keystore Filename
+  description: The name of the keystore file within the secret
+  name: JGROUPS_ENCRYPT_KEYSTORE
+  example: jgroups.jceks
+  required: false
+- displayName: JGroups Certificate Name
+  description: The name associated with the server certificate
+  name: JGROUPS_ENCRYPT_NAME
+  value: ''
+  required: false
+- displayName: JGroups Keystore Password
+  description: The password for the keystore and certificate
+  name: JGROUPS_ENCRYPT_PASSWORD
+  value: ''
+  required: false
+- displayName: JGroups Cluster Password
+  description: JGroups cluster password
+  name: JGROUPS_CLUSTER_PASSWORD
+  from: "[a-zA-Z0-9]{8}"
+  generate: expression
+  required: true
 - displayName: KIE MBeans
   description: KIE server mbeans enabled/disabled (Sets the kie.mbeans and kie.scanner.mbeans system properties)
   name: KIE_MBEANS
@@ -199,15 +255,6 @@ parameters:
   name: KIE_SERVER_HTTPS_PASSWORD
   value: mykeystorepass
   required: false
-- displayName: AppFormer elastic search reconnection tries.
-  description: The number of times that appformer will try to connect to the elasticsearch node before give up.
-  name: APPFORMER_ELASTIC_RETRIES
-  required: false
-- displayName: AppFormer JMS Broker port.
-  description: The port to connect to the JMS broker. Defaults to 61616
-  name: APPFORMER_JMS_BROKER_PORT
-  value: '61616'
-  required: false
 - displayName: AppFormer JMS Broker username.
   description: The username to connect to the JMS broker.
   name: APPFORMER_JMS_BROKER_USER
@@ -219,48 +266,32 @@ parameters:
   from: "[a-zA-Z]{6}[0-9]{1}!"
   generate: expression
   required: true
-- displayName: Elasticsearch Custom http Route Hostname
-  description: 'Custom hostname for http service route.  Leave blank for default hostname,
-    e.g.: <application-name>-rhpamindex-<project>.<default-domain-suffix>'
-  name: ES_HOSTNAME_HTTP
-  value: ''
-  required: false
-- displayName: Elasticsearch Cluster name
-  description: Sets the ES cluster.name and configure it on Business Central. Defaults to kie-cluster.
-  name: APPFORMER_ELASTIC_CLUSTER_NAME
-  value: ''
-  required: false
-- displayName: Elasticsearch Node name
-  description: Sets the ES node.name property. Defaults to HOSTNAME env value.
-  name: ES_NODE_NAME
-  value: ''
-  required: false
-- displayName: Elasticsearch Transport Host
-  description: Sets the ES transport.host property. This will set the transport address of the main ES cluster node. Used for communication between nodes in the cluster. Defaults to container address.
-  name: ES_TRANSPORT_HOST
-  value: ''
-  required: false
-- displayName: Elasticsearch Transport TCP Port
-  description: Sets the ES http.host property. This will set the http address of the main ES cluster node. Used for communication between nodes in the cluster and for communication with Business Central.
-  name: APPFORMER_ELASTIC_PORT
-  value: ''
-  required: false
-- displayName: Elasticsearch HTTP Host
-  description: Sets the ES http.host property. This will set the http address of the main ES cluster node. Used to interact with the cluster REST api. Defaults to the container ip address
-  name: ES_HTTP_HOST
-  value: ''
-  required: false
-- displayName: Elasticsearch HTTP Port
-  description: Sets the ES http.port property. This will set the http port of the main ES cluster node. Used to interact with the cluster REST API.
-  name: ES_HTTP_PORT
-  value: ''
-  required: false
-- displayName: Elasticsearch Additional Java Options
-  description: Appends custom jvm configurations/properties to ES jvm.options configuration file.
-  name: ES_JAVA_OPTS
-  value: ''
-  example: "-Xms1024m -Xmx1024m"
-  required: false
+- displayName: DataGrid User
+  description: DataGrid user name.
+  name: DATAGRID_USER
+  value: datagridUser
+  required: true
+- displayName: DataGrid Password
+  description: DataGrid password.
+  name: DATAGRID_PASSWORD
+  from: "[a-zA-Z]{6}[0-9]{1}!"
+  generate: expression
+  required: true
+- displayName: DataGrid ImageStream Namespace
+  description: Namespace in which the ImageStream for the DataGrid image is installed. Default is "openshift".
+  name: DATAGRID_IMAGE_STREAM_NAMESPACE
+  value: "openshift"
+  required: true
+- displayName: DataGrid ImageStream Name
+  description: The name of the image stream to use for the DataGrid. Default is "jboss-datagrid73-openshift".
+  name: DATAGRID_IMAGE_STREAM_NAME
+  value: "jboss-datagrid73-openshift"
+  required: true
+- displayName: DataGrid ImageStream Tag
+  description: The DataGrid image stream tag. Default is "1.0".
+  name: DATAGRID_IMAGE_STREAM_TAG
+  required: true
+  value: "1.0"
 - displayName: AMQ Scaledown Controller ImageStream Namespace
   description: Namespace in which the ImageStream for the AMQ Scaledown Controller image is installed. Default is "openshift".
   name: AMQ_SCALEDOWN_CONTROLLER_IMAGE_STREAM_NAMESPACE
@@ -301,11 +332,6 @@ parameters:
   name: AMQ_VOLUME_CAPACITY
   value: 1Gi
   required: true
-- displayName: Elasticsearch Volume Capacity
-  description: Size of persistent storage for Elasticsearch volume.
-  name: ES_VOLUME_CAPACITY
-  value: 1Gi
-  required: true
 ## OpenShift Enhancement BEGIN
 - displayName: Enable OpenShift Integration
   description: If set to true, turns on OpenShift integration feature (Sets the org.kie.workbench.controller.openshift.enabled system property)
@@ -341,10 +367,6 @@ parameters:
   name: IMAGE_STREAM_TAG
   value: "1.0"
   required: true
-- displayName: Maven mirror URL
-  description: Maven mirror to use by Business Central and KIE server.
-  name: MAVEN_MIRROR_URL
-  required: false
 - displayName: Maven repository ID
   description: The id to use for the maven repository, if set. Default is generated randomly.
   name: MAVEN_REPO_ID
@@ -397,6 +419,11 @@ parameters:
 - displayName: KIE Server Container Memory Limit
   description: KIE server Container memory limit
   name: KIE_SERVER_MEMORY_LIMIT
+  value: 1Gi
+  required: false
+- displayName: Datagrid Container Memory Limit
+  description: Datagrid Container memory limit
+  name: DATAGRID_MEMORY_LIMIT
   value: 1Gi
   required: false
 - displayName: KIE Server Startup Strategy
@@ -686,7 +713,41 @@ objects:
       service: "${APPLICATION_NAME}-ping"
     annotations:
       service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
-      description: "The JGroups ping port for clustering."
+      description: "The JGroups ping port for rhpamcentr clustering."
+- kind: Service
+  apiVersion: v1
+  spec:
+    ports:
+    - name: "hotrod"
+      port: 11333
+      targetPort: 11333
+    selector:
+      deploymentConfig: "${APPLICATION_NAME}-datagrid"
+  metadata:
+    name: "${APPLICATION_NAME}-datagrid"
+    labels:
+      application: "${APPLICATION_NAME}"
+      service: "${APPLICATION_NAME}-datagrid"
+    annotations:
+      description: "The Hot Rod ping port for DataGrid communication."
+- kind: Service
+  apiVersion: v1
+  spec:
+    clusterIP: "None"
+    ports:
+    - name: "ping"
+      port: 8888
+      targetPort: 8888
+    selector:
+      deploymentConfig: "${APPLICATION_NAME}-datagrid"
+  metadata:
+    name: "${APPLICATION_NAME}-datagrid-ping"
+    labels:
+      application: "${APPLICATION_NAME}"
+      service: "${APPLICATION_NAME}-datagrid"
+    annotations:
+      service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+      description: "The JGroups ping port for DataGrid clustering."
 - kind: Service
   apiVersion: v1
   spec:
@@ -711,25 +772,6 @@ objects:
       service: "${APPLICATION_NAME}-kieserver"
     annotations:
       description: All the KIE server web server's ports.
-- kind: Service
-  apiVersion: v1
-  spec:
-    ports:
-    - name: rest
-      port: 9200
-      targetPort: 9200
-    - name: transport
-      port: 9300
-      targetPort: 9300
-    selector:
-      deploymentConfig: "${APPLICATION_NAME}-rhpamindex"
-  metadata:
-    name: "${APPLICATION_NAME}-rhpamindex"
-    labels:
-      application: "${APPLICATION_NAME}"
-      service: "${APPLICATION_NAME}-rhpamindex"
-    annotations:
-      description: All the Business Central Indexing Elasticsearch ports.
 - apiVersion: v1
   kind: Service
   spec:
@@ -759,7 +801,7 @@ objects:
   metadata:
     name: ${APPLICATION_NAME}-amq-ping
     annotations:
-      description: The JGroups ping port for clustering.
+      description: The JGroups ping port for amq clustering.
       service.alpha.kubernetes.io/tolerate-unready-endpoints: 'true'
     labels:
       application: ${APPLICATION_NAME}
@@ -772,14 +814,29 @@ objects:
     - port: 3306
       targetPort: 3306
     selector:
-      deploymentConfig: "${APPLICATION_NAME}-mysql"
+      deploymentConfig: "${APPLICATION_NAME}-kieserver-mysql"
   metadata:
-    name: "${APPLICATION_NAME}-mysql"
+    name: "${APPLICATION_NAME}-kieserver-mysql"
     labels:
       application: "${APPLICATION_NAME}"
-      service: "${APPLICATION_NAME}-mysql"
+      service: "${APPLICATION_NAME}-kieserver-mysql"
     annotations:
-      description: The MySQL server's port.
+      description: The KIE server MySQL server's port.
+- apiVersion: v1
+  kind: Service
+  spec:
+    ports:
+    - port: 3306
+      targetPort: 3306
+    selector:
+      deploymentConfig: "${APPLICATION_NAME}-datagrid-mysql"
+  metadata:
+    name: "${APPLICATION_NAME}-datagrid-mysql"
+    labels:
+      application: "${APPLICATION_NAME}"
+      service: "${APPLICATION_NAME}-datagrid-mysql"
+    annotations:
+      description: The DataGrid MySQL server's port.
 ## MySQL service END
 - kind: Route
   apiVersion: v1
@@ -851,21 +908,6 @@ objects:
       targetPort: https
     tls:
       termination: passthrough
-- kind: Route
-  apiVersion: v1
-  id: "${APPLICATION_NAME}-rhpamindex-http"
-  metadata:
-    name: "${APPLICATION_NAME}-rhpamindex"
-    labels:
-      application: "${APPLICATION_NAME}"
-    annotations:
-      description: Route for Business Central Indexing's Elasticsearch http service.
-  spec:
-    host: "${ES_HOSTNAME_HTTP}"
-    to:
-      name: "${APPLICATION_NAME}-rhpamindex"
-    port:
-      targetPort: rest
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
@@ -1004,18 +1046,18 @@ objects:
             value: "${APPLICATION_NAME}-ping"
           - name: OPENSHIFT_DNS_PING_SERVICE_PORT
             value: "8888"
-          - name: APPFORMER_ELASTIC_PORT
-            value: "${APPFORMER_ELASTIC_PORT}"
-          - name: APPFORMER_ELASTIC_CLUSTER_NAME
-            value: "${APPFORMER_ELASTIC_CLUSTER_NAME}"
-          - name: APPFORMER_ELASTIC_RETRIES
-            value: "${APPFORMER_ELASTIC_RETRIES}"
-          - name: APPFORMER_ELASTIC_HOST
-            value: "${APPLICATION_NAME}-rhpamindex"
+          - name: APPFORMER_INFINISPAN_HOST
+            value: "${APPLICATION_NAME}-datagrid"
+          - name: APPFORMER_INFINISPAN_PORT
+            value: "11333"
+          - name: APPFORMER_INFINISPAN_USER
+            value: "${DATAGRID_USER}"
+          - name: APPFORMER_INFINISPAN_PASSWORD
+            value: "${DATAGRID_PASSWORD}"
           - name: APPFORMER_JMS_BROKER_ADDRESS
             value: "${APPLICATION_NAME}-amq-tcp"
           - name: APPFORMER_JMS_BROKER_PORT
-            value: "${APPFORMER_JMS_BROKER_PORT}"
+            value: "61616"
           - name: APPFORMER_JMS_BROKER_USER
             value: "${APPFORMER_JMS_BROKER_USER}"
           - name: APPFORMER_JMS_BROKER_PASSWORD
@@ -1188,7 +1230,7 @@ objects:
           - name: RHPAM_PASSWORD
             value: "${KIE_SERVER_MYSQL_PWD}"
           - name: RHPAM_SERVICE_HOST
-            value: "${APPLICATION_NAME}-mysql"
+            value: "${APPLICATION_NAME}-kieserver-mysql"
           - name: RHPAM_SERVICE_PORT
             value: "3306"
           - name: KIE_SERVER_PERSISTENCE_DIALECT
@@ -1332,85 +1374,6 @@ objects:
         - name: kieserver-keystore-volume
           secret:
             secretName: "${KIE_SERVER_HTTPS_SECRET}"
-- kind: DeploymentConfig
-  apiVersion: v1
-  metadata:
-    name: "${APPLICATION_NAME}-rhpamindex"
-    labels:
-      application: "${APPLICATION_NAME}"
-      service: "${APPLICATION_NAME}-rhpamindex"
-    annotations:
-      template.alpha.openshift.io/wait-for-ready: "true"
-  spec:
-    strategy:
-      type: Recreate
-    triggers:
-    - type: ImageChange
-      imageChangeParams:
-        automatic: true
-        containerNames:
-        - "${APPLICATION_NAME}-rhpamindex"
-        from:
-          kind: ImageStreamTag
-          namespace: "${IMAGE_STREAM_NAMESPACE}"
-          name: "rhpam73-businesscentral-indexing-openshift:${IMAGE_STREAM_TAG}"
-    - type: ConfigChange
-    replicas: 1
-    selector:
-      deploymentConfig: "${APPLICATION_NAME}-rhpamindex"
-    template:
-      metadata:
-        name: "${APPLICATION_NAME}-rhpamindex"
-        labels:
-          deploymentConfig: "${APPLICATION_NAME}-rhpamindex"
-          application: "${APPLICATION_NAME}"
-      spec:
-        terminationGracePeriodSeconds: 60
-        containers:
-        - name: "${APPLICATION_NAME}-rhpamindex"
-          image: rhpam73-businesscentral-indexing-openshift
-          imagePullPolicy: Always
-          volumeMounts:
-          - name: "${APPLICATION_NAME}-rhpamindex-pvol"
-            mountPath: "/opt/elasticsearch/data"
-          livenessProbe:
-            tcpSocket:
-              port: 9300
-            initialDelaySeconds: 15
-            timeoutSeconds: 1
-          readinessProbe:
-            httpGet:
-              scheme: HTTP
-              path: /_cluster/health
-              port: 9200
-            initialDelaySeconds: 15
-            timeoutSeconds: 2
-          ports:
-          - name: es
-            containerPort: 9300
-            protocol: TCP
-          - name: http
-            containerPort: 9200
-            protocol: TCP
-          env:
-          - name: ES_CLUSTER_NAME
-            value: "${APPFORMER_ELASTIC_CLUSTER_NAME}"
-          - name: ES_NODE_NAME
-            value: "${ES_NODE_NAME}"
-          - name: ES_TRANSPORT_HOST
-            value: "${ES_TRANSPORT_HOST}"
-          - name: ES_TRANSPORT_TCP_PORT
-            value: "${APPFORMER_ELASTIC_PORT}"
-          - name: ES_HTTP_PORT
-            value: "${ES_HTTP_PORT}"
-          - name: ES_HTTP_HOST
-            value: "${ES_HTTP_HOST}"
-          - name: ES_JAVA_OPTS
-            value: "${ES_JAVA_OPTS}"
-        volumes:
-        - name: "${APPLICATION_NAME}-rhpamindex-pvol"
-          persistentVolumeClaim:
-            claimName: "${APPLICATION_NAME}-rhpamindex-claim"
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
@@ -1717,14 +1680,13 @@ objects:
     labels:
       application: "${APPLICATION_NAME}"
     name: ${APPLICATION_NAME}-amq-scaledown-controller-sa
-## MySQL deployment config BEGIN
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
-    name: "${APPLICATION_NAME}-mysql"
+    name: "${APPLICATION_NAME}-datagrid"
     labels:
       application: "${APPLICATION_NAME}"
-      service: "${APPLICATION_NAME}-mysql"
+      service: "${APPLICATION_NAME}-datagrid"
     annotations:
       template.alpha.openshift.io/wait-for-ready: "true"
   spec:
@@ -1735,7 +1697,142 @@ objects:
       imageChangeParams:
         automatic: true
         containerNames:
-        - "${APPLICATION_NAME}-mysql"
+        - "${APPLICATION_NAME}-datagrid"
+        from:
+          kind: ImageStreamTag
+          namespace: "${DATAGRID_IMAGE_STREAM_NAMESPACE}"
+          name: "${DATAGRID_IMAGE_STREAM_NAME}:${DATAGRID_IMAGE_STREAM_TAG}"
+    - type: ConfigChange
+    replicas: 1
+    selector:
+      deploymentConfig: "${APPLICATION_NAME}-datagrid"
+    template:
+      metadata:
+        name: "${APPLICATION_NAME}"
+        labels:
+          deploymentConfig: "${APPLICATION_NAME}-datagrid"
+          application: "${APPLICATION_NAME}"
+      spec:
+        terminationGracePeriodSeconds: 60
+        containers:
+        - name: "${APPLICATION_NAME}-datagrid"
+          image: "${DATAGRID_IMAGE_STREAM_NAME}"
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "${DATAGRID_MEMORY_LIMIT}"
+          volumeMounts:
+          - name: datagrid-jgroups-keystore-volume
+            mountPath: "/etc/jgroups-encrypt-secret-volume"
+            readOnly: true
+          livenessProbe:
+            exec:
+              command:
+              - "/bin/bash"
+              - "-c"
+              - "/opt/datagrid/bin/livenessProbe.sh"
+            initialDelaySeconds: 60
+          readinessProbe:
+            exec:
+              command:
+              - "/bin/bash"
+              - "-c"
+              - "/opt/datagrid/bin/readinessProbe.sh"
+          ports:
+          - name: jolokia
+            containerPort: 8778
+            protocol: TCP
+          - name: ping
+            containerPort: 8888
+            protocol: TCP
+          - name: hotrod-internal
+            containerPort: 11222
+            protocol: TCP
+          - name: hotrod
+            containerPort: 11333
+            protocol: TCP
+          env:
+          - name: USERNAME
+            value: "${DATAGRID_USER}"
+          - name: PASSWORD
+            value: "${DATAGRID_PASSWORD}"
+          - name: DATAGRID_SPLIT
+            value: "true"
+          - name: DATASOURCES
+            value: "RHPAM"
+## MySQL driver settings BEGIN
+          - name: RHPAM_DATABASE
+            value: "${DATAGRID_MYSQL_DB}"
+          - name: RHPAM_DRIVER
+            value: "mysql"
+          - name: RHPAM_USERNAME
+            value: "${DATAGRID_MYSQL_USER}"
+          - name: RHPAM_PASSWORD
+            value: "${DATAGRID_MYSQL_PWD}"
+          - name: RHPAM_SERVICE_HOST
+            value: "${APPLICATION_NAME}-datagrid-mysql"
+          - name: RHPAM_SERVICE_PORT
+            value: "3306"
+## MySQL driver settings END
+          - name: RHPAM_JTA
+            value: "true"
+          - name: RHPAM_JNDI
+            value: "${DATAGRID_MYSQL_DB_JNDI}"
+          - name: DEFAULT_JDBC_STORE_DATASOURCE
+            value: "${DATAGRID_MYSQL_DB_JNDI}"
+          - name: DEFAULT_JDBC_STORE_TYPE
+            value: "string"
+          - name: MEMCACHED_JDBC_STORE_DATASOURCE
+            value: "${DATAGRID_MYSQL_DB_JNDI}"
+          - name: JGROUPS_PING_PROTOCOL
+            value: "openshift.DNS_PING"
+          - name: OPENSHIFT_DNS_PING_SERVICE_NAME
+            value: "${APPLICATION_NAME}-datagrid-ping"
+          - name: OPENSHIFT_DNS_PING_SERVICE_PORT
+            value: '8888'
+          - name: INFINISPAN_CONNECTORS
+            value: "hotrod"
+          - name: HOTROD_SERVICE_NAME
+            value: "${APPLICATION_NAME}-datagrid"
+          - name: HOTROD_AUTHENTICATION
+            value: "true"
+          - name: HOTROD_ENCRYPTION
+            value: "false"
+          - name: JGROUPS_ENCRYPT_SECRET
+            value: "${JGROUPS_ENCRYPT_SECRET}"
+          - name: JGROUPS_ENCRYPT_KEYSTORE
+            value: "${JGROUPS_ENCRYPT_KEYSTORE}"
+          - name: JGROUPS_ENCRYPT_KEYSTORE_DIR
+            value: "/etc/jgroups-encrypt-secret-volume"
+          - name: JGROUPS_ENCRYPT_NAME
+            value: "${JGROUPS_ENCRYPT_NAME}"
+          - name: JGROUPS_ENCRYPT_PASSWORD
+            value: "${JGROUPS_ENCRYPT_PASSWORD}"
+          - name: JGROUPS_CLUSTER_PASSWORD
+            value: "${JGROUPS_CLUSTER_PASSWORD}"
+        volumes:
+        - name: datagrid-jgroups-keystore-volume
+          secret:
+            secretName: "${JGROUPS_ENCRYPT_SECRET}"
+## MySQL deployment config BEGIN
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: "${APPLICATION_NAME}-kieserver-mysql"
+    labels:
+      application: "${APPLICATION_NAME}"
+      service: "${APPLICATION_NAME}-kieserver-mysql"
+    annotations:
+      template.alpha.openshift.io/wait-for-ready: "true"
+  spec:
+    strategy:
+      type: Recreate
+    triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - "${APPLICATION_NAME}-kieserver-mysql"
         from:
           kind: ImageStreamTag
           namespace: "${MYSQL_IMAGE_STREAM_NAMESPACE}"
@@ -1743,17 +1840,17 @@ objects:
     - type: ConfigChange
     replicas: 1
     selector:
-      deploymentConfig: "${APPLICATION_NAME}-mysql"
+      deploymentConfig: "${APPLICATION_NAME}-kieserver-mysql"
     template:
       metadata:
-        name: "${APPLICATION_NAME}-mysql"
+        name: "${APPLICATION_NAME}-kieserver-mysql"
         labels:
-          deploymentConfig: "${APPLICATION_NAME}-mysql"
+          deploymentConfig: "${APPLICATION_NAME}-kieserver-mysql"
           application: "${APPLICATION_NAME}"
       spec:
         terminationGracePeriodSeconds: 60
         containers:
-        - name: "${APPLICATION_NAME}-mysql"
+        - name: "${APPLICATION_NAME}-kieserver-mysql"
           image: mysql
           imagePullPolicy: Always
           livenessProbe:
@@ -1776,7 +1873,7 @@ objects:
             protocol: TCP
           volumeMounts:
           - mountPath: "/var/lib/mysql/data"
-            name: "${APPLICATION_NAME}-mysql-pvol"
+            name: "${APPLICATION_NAME}-kieserver-mysql-pvol"
           env:
           - name: MYSQL_USER
             value: "${KIE_SERVER_MYSQL_USER}"
@@ -1785,9 +1882,79 @@ objects:
           - name: MYSQL_DATABASE
             value: "${KIE_SERVER_MYSQL_DB}"
         volumes:
-        - name: "${APPLICATION_NAME}-mysql-pvol"
+        - name: "${APPLICATION_NAME}-kieserver-mysql-pvol"
           persistentVolumeClaim:
-            claimName: "${APPLICATION_NAME}-mysql-claim"
+            claimName: "${APPLICATION_NAME}-kieserver-mysql-claim"
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: "${APPLICATION_NAME}-datagrid-mysql"
+    labels:
+      application: "${APPLICATION_NAME}"
+      service: "${APPLICATION_NAME}-datagrid-mysql"
+    annotations:
+      template.alpha.openshift.io/wait-for-ready: "true"
+  spec:
+    strategy:
+      type: Recreate
+    triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - "${APPLICATION_NAME}-datagrid-mysql"
+        from:
+          kind: ImageStreamTag
+          namespace: "${MYSQL_IMAGE_STREAM_NAMESPACE}"
+          name: "mysql:${MYSQL_IMAGE_STREAM_TAG}"
+    - type: ConfigChange
+    replicas: 1
+    selector:
+      deploymentConfig: "${APPLICATION_NAME}-datagrid-mysql"
+    template:
+      metadata:
+        name: "${APPLICATION_NAME}-datagrid-mysql"
+        labels:
+          deploymentConfig: "${APPLICATION_NAME}-datagrid-mysql"
+          application: "${APPLICATION_NAME}"
+      spec:
+        terminationGracePeriodSeconds: 60
+        containers:
+        - name: "${APPLICATION_NAME}-datagrid-mysql"
+          image: mysql
+          imagePullPolicy: Always
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+          readinessProbe:
+            exec:
+              command:
+                - "/bin/sh"
+                - "-i"
+                - "-c"
+                - "MYSQL_PWD=\"$MYSQL_PASSWORD\" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE -e 'SELECT 1'"
+              port: 3306
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          ports:
+          - containerPort: 3306
+            protocol: TCP
+          volumeMounts:
+          - mountPath: "/var/lib/mysql/data"
+            name: "${APPLICATION_NAME}-datagrid-mysql-pvol"
+          env:
+          - name: MYSQL_USER
+            value: "${DATAGRID_MYSQL_USER}"
+          - name: MYSQL_PASSWORD
+            value: "${DATAGRID_MYSQL_PWD}"
+          - name: MYSQL_DATABASE
+            value: "${DATAGRID_MYSQL_DB}"
+        volumes:
+        - name: "${APPLICATION_NAME}-datagrid-mysql-pvol"
+          persistentVolumeClaim:
+            claimName: "${APPLICATION_NAME}-datagrid-mysql-claim"
 ## MySQL deployment config END
 - apiVersion: v1
   kind: PersistentVolumeClaim
@@ -1805,7 +1972,7 @@ objects:
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    name: "${APPLICATION_NAME}-mysql-claim"
+    name: "${APPLICATION_NAME}-kieserver-mysql-claim"
     labels:
       application: "${APPLICATION_NAME}"
   spec:
@@ -1813,12 +1980,11 @@ objects:
     - ReadWriteOnce
     resources:
       requests:
-        storage: "${DB_VOLUME_CAPACITY}"
-## MySQL persistent volume claim END
+        storage: "${KIE_SERVER_MYSQL_DB_VOLUME_CAPACITY}"
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    name: "${APPLICATION_NAME}-rhpamindex-claim"
+    name: "${APPLICATION_NAME}-datagrid-mysql-claim"
     labels:
       application: "${APPLICATION_NAME}"
   spec:
@@ -1826,4 +1992,5 @@ objects:
     - ReadWriteOnce
     resources:
       requests:
-        storage: "${ES_VOLUME_CAPACITY}"
+        storage: "${DATAGRID_MYSQL_DB_VOLUME_CAPACITY}"
+## MySQL persistent volume claim END
