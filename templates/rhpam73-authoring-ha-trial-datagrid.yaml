@@ -1758,26 +1758,22 @@ objects:
             value: "${DATAGRID_PASSWORD}"
           - name: DATAGRID_SPLIT
             value: "true"
-          - name: DATASOURCES
-            value: "RHPAM"
-## MySQL driver settings BEGIN
+## MySQL datasource settings BEGIN
+          - name: DB_SERVICE_PREFIX_MAPPING
+            value: "${APPLICATION_NAME}-datagrid-mysql=RHPAM"
+          - name: TX_DATABASE_PREFIX_MAPPING
+            value: "${APPLICATION_NAME}-datagrid-mysql=RHPAM"
           - name: RHPAM_DATABASE
             value: "${DATAGRID_MYSQL_DB}"
-          - name: RHPAM_DRIVER
-            value: "mysql"
           - name: RHPAM_USERNAME
             value: "${DATAGRID_MYSQL_USER}"
           - name: RHPAM_PASSWORD
             value: "${DATAGRID_MYSQL_PWD}"
-          - name: RHPAM_SERVICE_HOST
-            value: "${APPLICATION_NAME}-datagrid-mysql"
-          - name: RHPAM_SERVICE_PORT
-            value: "3306"
-## MySQL driver settings END
           - name: RHPAM_JTA
             value: "true"
           - name: RHPAM_JNDI
             value: "${DATAGRID_MYSQL_DB_JNDI}"
+## MySQL datasource settings END
           - name: DEFAULT_JDBC_STORE_DATASOURCE
             value: "${DATAGRID_MYSQL_DB_JNDI}"
           - name: DEFAULT_JDBC_STORE_TYPE
