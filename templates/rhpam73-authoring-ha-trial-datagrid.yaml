@@ -1556,7 +1556,6 @@ objects:
             ]
           }
         }
-    creationTimestamp: null
     generation: 3
     labels:
       application: ${APPLICATION_NAME}
@@ -1571,7 +1570,6 @@ objects:
     serviceName: ${APPLICATION_NAME}-amq-tcp
     template:
       metadata:
-        creationTimestamp: null
         name: ${APPLICATION_NAME}-amq
         labels:
           application: ${APPLICATION_NAME}
@@ -1656,7 +1654,6 @@ objects:
       type: OnDelete
     volumeClaimTemplates:
     - metadata:
-        creationTimestamp: null
         name: ${APPLICATION_NAME}-amq-pvol
       spec:
         accessModes:
